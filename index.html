@@ -37,7 +37,7 @@ body {
   color: var(--text);
   display: flex;
   justify-content: center;
-  padding: 30px;
+  padding: 20px;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -46,10 +46,9 @@ body {
   max-width: 960px;
   background: var(--bg2);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 20px;
   box-shadow: var(--shadow);
   border: 1px solid rgba(255,255,255,0.08);
-  transition: background 0.3s;
 }
 
 /* HEADER */
@@ -58,17 +57,20 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
+  text-align: center;
 }
 
 .brand {
+  flex: 1 1 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 14px;
 }
 
 .brand img {
-  height: 48px;
-  border-radius: 8px;
+  height: 96px;
 }
 
 .title {
@@ -81,8 +83,7 @@ body {
   color: var(--subtle);
 }
 
-/* BUTTONS */
-.mic-btn, .mode-btn {
+.mode-btn {
   background: var(--text);
   color: var(--bg);
   border: none;
@@ -90,43 +91,37 @@ body {
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s ease;
+  margin-top: 10px;
 }
 
-.mic-btn:hover, .mode-btn:hover {
-  background: var(--accent);
-  color: var(--bg);
-}
-
-/* CONTROL BAR (tuning) */
+/* CONTROL BAR */
 .control-bar {
   margin-top: 18px;
   background: var(--bg);
-  padding: 14px 18px;
+  padding: 14px;
   border-radius: 14px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
   border: 1px solid rgba(255,255,255,0.1);
 }
 
 .control-bar select,
 .control-bar input {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid var(--subtle);
   background: var(--bg2);
   color: var(--text);
-  min-width: 180px;
+  width: 100%;
 }
 
-.control-bar button {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent);
+.mic-btn {
+  background: var(--text);
   color: var(--bg);
+  border: none;
+  padding: 12px;
+  border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -151,21 +146,21 @@ body {
   background: var(--success);
 }
 
-/* CARD BASE */
+/* CARD */
 .card {
   margin-top: 20px;
   background: var(--bg);
   padding: 20px;
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
-  transition: background 0.3s;
 }
 
 /* TUNER GAUGE */
 .gauge {
   position: relative;
-  width: 300px;
-  height: 160px;
+  width: 100%;
+  max-width: 260px;
+  height: 140px;
   margin: 0 auto;
 }
 
@@ -183,7 +178,7 @@ body {
 .tick {
   position: absolute;
   width: 2px;
-  height: 14px;
+  height: 12px;
   background: var(--subtle);
   left: 50%;
   transform-origin: bottom center;
@@ -191,7 +186,7 @@ body {
 
 .tick-label {
   position: absolute;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--subtle);
   transform: translateX(-50%);
 }
@@ -199,12 +194,11 @@ body {
 .needle {
   position: absolute;
   width: 3px;
-  height: 120px;
+  height: 100px;
   background: var(--accent);
   left: 50%;
   bottom: 0;
   transform-origin: bottom center;
-  transform: rotate(0deg);
   transition: transform 0.08s ease-out;
 }
 
@@ -214,7 +208,7 @@ body {
 }
 
 .note-display {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
 }
 
@@ -236,40 +230,28 @@ body {
 .cents-pill.flat { border-color: var(--accent); color: var(--accent); }
 
 /* METRONOME */
-.metronome-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 0.9rem;
-}
-
 .metronome-controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.metronome-controls input[type="number"],
+.metronome-controls input,
 .metronome-controls select {
-  padding: 6px 10px;
+  padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--subtle);
   background: var(--bg2);
   color: var(--text);
-  width: 80px;
 }
 
 .metronome-btn {
-  padding: 6px 12px;
+  padding: 10px;
   border-radius: 999px;
   border: none;
   background: var(--accent);
   color: var(--bg);
   font-weight: 600;
-  cursor: pointer;
 }
 
 .metronome-visual {
@@ -288,40 +270,26 @@ body {
 }
 
 /* DRUM MACHINE */
-.drum-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
 .drum-main {
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: 1.2fr 2fr;
-  gap: 16px;
-}
-
-@media (max-width: 800px) {
-  .drum-main {
-    grid-template-columns: 1fr;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .drum-pads {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .pad {
-  padding: 14px 10px;
-  border-radius: 10px;
+  padding: 18px;
+  border-radius: 12px;
   background: #1b2438;
   border: 1px solid rgba(255,255,255,0.15);
   text-align: center;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 0.85rem;
   transition: 0.1s ease;
 }
 
@@ -332,21 +300,14 @@ body {
 }
 
 .drum-controls {
-  margin-top: 8px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 0.8rem;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.drum-controls label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.drum-controls input[type="range"] {
-  width: 100px;
+.drum-controls input,
+.drum-controls select {
+  width: 100%;
 }
 
 .drum-grid {
@@ -355,7 +316,7 @@ body {
 
 .step-grid {
   border-collapse: collapse;
-  width: 100%;
+  width: 600px;
   font-size: 0.8rem;
 }
 
@@ -367,12 +328,11 @@ body {
 }
 
 .step {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 4px;
   background: #1b2438;
   cursor: pointer;
-  margin: 0 auto;
 }
 
 .step.active {
@@ -388,41 +348,37 @@ body {
 <body class="dark">
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="brand">
       <img src="shark.png" alt="Shark Logo">
-      <div>
-        <div class="title">THE PLEASE USE ME VIGNOLA TUNER</div>
-        <div class="subtitle">Tuner, metronome, and drum machine in one chic navy rig.</div>
-      </div>
+      <div class="title">THE PLEASE USE ME VIGNOLA TUNER</div>
+      <div class="subtitle">Tuner • Metronome • Drum Machine</div>
     </div>
     <button class="mode-btn" id="modeBtn">Light Mode</button>
   </div>
 
-  <!-- TUNING CONTROL BAR -->
   <div class="control-bar">
     <select id="tuningSelect">
       <option value="auto">Auto (Closest Note)</option>
-      <option value="standard">Guitar — Standard (EADGBE)</option>
-      <option value="dropd">Guitar — Drop D</option>
-      <option value="openg">Guitar — Open G</option>
-      <option value="ukulele">Ukulele (GCEA)</option>
-      <option value="bass">Bass (EADG)</option>
-      <option value="custom">Custom Tuning</option>
+      <option value="standard">Guitar — Standard</option>
+      <option value="dropd">Drop D</option>
+      <option value="openg">Open G</option>
+      <option value="ukulele">Ukulele</option>
+      <option value="bass">Bass</option>
+      <option value="custom">Custom</option>
     </select>
-    <input id="customInput" placeholder="Enter notes (e.g. D2 A2 D3 G3)" style="display:none;">
+
+    <input id="customInput" placeholder="D2 A2 D3 G3" style="display:none;">
     <button id="applyCustom" style="display:none;">Apply</button>
+
     <button id="micButton" class="mic-btn">Enable Mic</button>
   </div>
 
-  <!-- STATUS -->
   <div class="status">
     <div id="statusDot" class="status-dot"></div>
     <span id="statusText">Microphone is off.</span>
   </div>
 
-  <!-- TUNER CARD -->
   <div class="card">
     <div class="gauge">
       <div class="gauge-arc"></div>
@@ -433,11 +389,11 @@ body {
       <div class="tick" style="transform: translateX(-50%) rotate(20deg); top: 10px;"></div>
       <div class="tick" style="transform: translateX(-50%) rotate(40deg); top: 10px;"></div>
 
-      <div class="tick-label" style="left: 20%; top: 120px;">-50</div>
-      <div class="tick-label" style="left: 35%; top: 90px;">-25</div>
-      <div class="tick-label" style="left: 50%; top: 70px;">0</div>
-      <div class="tick-label" style="left: 65%; top: 90px;">+25</div>
-      <div class="tick-label" style="left: 80%; top: 120px;">+50</div>
+      <div class="tick-label" style="left: 20%; top: 110px;">-50</div>
+      <div class="tick-label" style="left: 35%; top: 85px;">-25</div>
+      <div class="tick-label" style="left: 50%; top: 65px;">0</div>
+      <div class="tick-label" style="left: 65%; top: 85px;">+25</div>
+      <div class="tick-label" style="left: 80%; top: 110px;">+50</div>
 
       <div id="needle" class="needle"></div>
     </div>
@@ -449,23 +405,14 @@ body {
     </div>
   </div>
 
-  <!-- METRONOME CARD -->
   <div class="card">
-    <div class="metronome-header">
-      <div><strong>Metronome</strong></div>
-      <div id="metronomeStatus" style="color:var(--subtle);">Stopped</div>
-    </div>
     <div class="metronome-controls">
-      <label>BPM
-        <input type="number" id="bpmInput" min="30" max="260" value="120">
-      </label>
-      <label>Time
-        <select id="timeSigSelect">
-          <option value="4">4/4</option>
-          <option value="3">3/4</option>
-          <option value="6">6/8</option>
-        </select>
-      </label>
+      <input type="number" id="bpmInput" value="120" min="30" max="260">
+      <select id="timeSigSelect">
+        <option value="4">4/4</option>
+        <option value="3">3/4</option>
+        <option value="6">6/8</option>
+      </select>
       <button class="metronome-btn" id="metronomeToggle">Start</button>
     </div>
     <div class="metronome-visual">
@@ -473,85 +420,48 @@ body {
     </div>
   </div>
 
-  <!-- DRUM MACHINE CARD -->
   <div class="card">
-    <div class="drum-header">
-      <div><strong>Drum Machine</strong> — Acoustic hybrid</div>
-      <div id="drumStatus" style="color:var(--subtle);">Stopped</div>
-    </div>
-
     <div class="drum-main">
-      <!-- Pads + controls -->
-      <div>
-        <div class="drum-pads">
-          <div class="pad" data-sound="kick">Kick</div>
-          <div class="pad" data-sound="snare">Snare</div>
-          <div class="pad" data-sound="hihat">Hi‑Hat</div>
-          <div class="pad" data-sound="tom">Tom</div>
-          <div class="pad" data-sound="ride">Ride</div>
-          <div class="pad" data-sound="rim">Rim</div>
-        </div>
 
-        <div class="drum-controls">
-          <label>Tempo (shared)
-            <input type="number" id="drumBpm" min="30" max="260" value="120">
-          </label>
-          <label>Swing
-            <input type="range" id="swing" min="0" max="0.5" step="0.05" value="0">
-          </label>
-          <label>Length
-            <select id="patternLength">
-              <option value="8">8</option>
-              <option value="16" selected>16</option>
-              <option value="32">32</option>
-            </select>
-          </label>
-          <button class="metronome-btn" id="drumToggle">Play</button>
-        </div>
-
-        <div class="drum-controls">
-          <label>Kick Vol
-            <input type="range" id="vol-kick" min="0" max="1" step="0.05" value="0.9">
-          </label>
-          <label>Snare Vol
-            <input type="range" id="vol-snare" min="0" max="1" step="0.05" value="0.8">
-          </label>
-          <label>Hat Vol
-            <input type="range" id="vol-hihat" min="0" max="1" step="0.05" value="0.6">
-          </label>
-        </div>
+      <div class="drum-pads">
+        <div class="pad" data-sound="kick">Kick</div>
+        <div class="pad" data-sound="snare">Snare</div>
+        <div class="pad" data-sound="hihat">Hi‑Hat</div>
+        <div class="pad" data-sound="tom">Tom</div>
+        <div class="pad" data-sound="ride">Ride</div>
+        <div class="pad" data-sound="rim">Rim</div>
       </div>
 
-      <!-- Step grid -->
+      <div class="drum-controls">
+        <input type="number" id="drumBpm" value="120" min="30" max="260">
+        <input type="range" id="swing" min="0" max="0.5" step="0.05" value="0">
+        <select id="patternLength">
+          <option value="16" selected>16</option>
+        </select>
+        <button class="metronome-btn" id="drumToggle">Play</button>
+      </div>
+
       <div class="drum-grid">
         <table class="step-grid" id="stepGrid">
-          <thead>
-            <tr>
-              <th>Sound</th>
-              <!-- steps injected by JS -->
-            </tr>
-          </thead>
-          <tbody>
-            <!-- rows injected by JS -->
-          </tbody>
+          <thead><tr><th>Sound</th></tr></thead>
+          <tbody></tbody>
         </table>
       </div>
+
     </div>
   </div>
 
 </div>
 
 <script>
-/* DARK/LIGHT MODE */
-const modeBtn = document.getElementById("modeBtn");
-modeBtn.onclick = () => {
+/* MODE */
+document.getElementById("modeBtn").onclick = () => {
   document.body.classList.toggle("light");
-  modeBtn.textContent = document.body.classList.contains("light")
-    ? "Dark Mode"
-    : "Light Mode";
+  document.getElementById("modeBtn").textContent =
+    document.body.classList.contains("light") ? "Dark Mode" : "Light Mode";
 };
 
-/* TUNING PRESETS */
+/* TUNING */
 const PRESETS = {
   auto: [],
   standard: ["E2","A2","D3","G3","B3","E4"],
@@ -563,43 +473,44 @@ const PRESETS = {
 
 let activeTuning = [];
 
+function noteToFreq(note) {
+  const m = note.match(/^([A-G]#?)(\d)$/i);
+  if (!m) return null;
+  const name = m[1].toUpperCase();
+  const octave = +m[2];
+  const SEMI = {C:0,"C#":1,D:2,"D#":3,E:4,F:5,"F#":6,G:7,"G#":8,A:9,"A#":10,B:11};
+  const n = SEMI[name] + (octave + 1) * 12;
+  return 440 * Math.pow(2, (n - 69) / 12);
+}
+
 const tuningSelect = document.getElementById("tuningSelect");
 const customInput = document.getElementById("customInput");
 const applyCustom = document.getElementById("applyCustom");
 
 tuningSelect.onchange = () => {
-  const val = tuningSelect.value;
-  if (val === "custom") {
+  const v = tuningSelect.value;
+  if (v === "custom") {
     customInput.style.display = "block";
     applyCustom.style.display = "block";
     activeTuning = [];
   } else {
     customInput.style.display = "none";
     applyCustom.style.display = "none";
-    activeTuning = PRESETS[val].map(n => noteToFreq(n)).filter(Boolean);
+    activeTuning = PRESETS[v].map(noteToFreq).filter(Boolean);
   }
 };
 
 applyCustom.onclick = () => {
-  const notes = customInput.value.trim().split(/\s+/);
-  activeTuning = notes.map(n => noteToFreq(n)).filter(Boolean);
+  activeTuning = customInput.value.trim().split(/\s+/).map(noteToFreq).filter(Boolean);
 };
 
-function noteToFreq(note) {
-  const match = note.match(/^([A-G]#?)(\d)$/i);
-  if (!match) return null;
-  const name = match[1].toUpperCase();
-  const octave = parseInt(match[2], 10);
-  const SEMITONES = {
-    C:0, "C#":1, D:2, "D#":3, E:4,
-    F:5, "F#":6, G:7, "G#":8,
-    A:9, "A#":10, B:11
-  };
-  const n = SEMITONES[name] + (octave + 1) * 12;
-  return 440 * Math.pow(2, (n - 69) / 12);
-}
-
 /* TUNER AUDIO */
+let audioContext = null;
+let analyser = null;
+let micStream = null;
+let dataBuffer = null;
+let rafId = null;
+
 const micButton = document.getElementById("micButton");
 const statusDot = document.getElementById("statusDot");
 const statusText = document.getElementById("statusText");
@@ -608,18 +519,9 @@ const noteDisplay = document.getElementById("noteDisplay");
 const freqDisplay = document.getElementById("freqDisplay");
 const centsDisplay = document.getElementById("centsDisplay");
 
-let audioContext = null;
-let analyser = null;
-let micStream = null;
-let dataBuffer = null;
-let rafId = null;
-
 micButton.onclick = async () => {
-  if (!audioContext || audioContext.state === "closed") {
-    await startTuner();
-  } else {
-    stopTuner();
-  }
+  if (!audioContext || audioContext.state === "closed") startTuner();
+  else stopTuner();
 };
 
 async function startTuner() {
@@ -627,12 +529,11 @@ async function startTuner() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     await audioContext.resume();
     micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const source = audioContext.createMediaStreamSource(micStream);
-
+    const src = audioContext.createMediaStreamSource(micStream);
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
     dataBuffer = new Float32Array(analyser.fftSize);
-    source.connect(analyser);
+    src.connect(analyser);
 
     statusDot.classList.add("live");
     statusText.textContent = "Listening…";
@@ -640,10 +541,7 @@ async function startTuner() {
 
     loopTuner();
   } catch (e) {
-    console.error(e);
-    statusText.textContent = "Mic access failed. Check permissions.";
-    micButton.textContent = "Enable Mic";
-    audioContext = null;
+    statusText.textContent = "Mic error";
   }
 }
 
@@ -652,45 +550,33 @@ function stopTuner() {
   if (micStream) micStream.getTracks().forEach(t => t.stop());
   if (audioContext) audioContext.close();
   audioContext = null;
-  analyser = null;
-  micStream = null;
-  dataBuffer = null;
 
   statusDot.classList.remove("live");
   statusText.textContent = "Microphone is off.";
   micButton.textContent = "Enable Mic";
-  needle.style.transform = "rotate(0deg)";
-  noteDisplay.textContent = "--";
-  freqDisplay.textContent = "-- Hz";
-  centsDisplay.textContent = "Waiting…";
-  centsDisplay.className = "cents-pill";
+}
+
+function detectPitch(buf, sr) {
+  let rms = 0;
+  for (let i = 0; i < buf.length; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / buf.length);
+  if (rms < 0.008) return -1;
+
+  let best = -1, bestCorr = 0;
+  for (let o = 40; o < 1000; o++) {
+    let c = 0;
+    for (let i = 0; i < buf.length - o; i++) c += buf[i] * buf[i + o];
+    if (c > bestCorr) bestCorr = c, best = o;
+  }
+  return best > 0 ? sr / best : -1;
 }
 
 function loopTuner() {
   if (!analyser || !dataBuffer) return;
   analyser.getFloatTimeDomainData(dataBuffer);
-  const freq = detectPitch(dataBuffer, audioContext.sampleRate);
-  if (freq !== -1) updateTunerUI(freq);
+  const f = detectPitch(dataBuffer, audioContext.sampleRate);
+  if (f !== -1) updateTunerUI(f);
   rafId = requestAnimationFrame(loopTuner);
-}
-
-function detectPitch(buf, sampleRate) {
-  const SIZE = buf.length;
-  let rms = 0;
-  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
-  rms = Math.sqrt(rms / SIZE);
-  if (rms < 0.008) return -1;
-
-  let bestOffset = -1, bestCorr = 0;
-  for (let offset = 40; offset < 1000; offset++) {
-    let corr = 0;
-    for (let i = 0; i < SIZE - offset; i++) corr += buf[i] * buf[i + offset];
-    if (corr > bestCorr) {
-      bestCorr = corr;
-      bestOffset = offset;
-    }
-  }
-  return bestOffset > 0 ? sampleRate / bestOffset : -1;
 }
 
 function updateTunerUI(freq) {
@@ -728,7 +614,6 @@ const bpmInput = document.getElementById("bpmInput");
 const timeSigSelect = document.getElementById("timeSigSelect");
 const metronomeToggle = document.getElementById("metronomeToggle");
 const metronomePulse = document.getElementById("metronomePulse");
-const metronomeStatus = document.getElementById("metronomeStatus");
 
 let metronomeCtx = null;
 let metronomeTimer = null;
@@ -738,12 +623,13 @@ function metronomeClick() {
   if (!metronomeCtx) metronomeCtx = new (window.AudioContext || window.webkitAudioContext)();
   const osc = metronomeCtx.createOscillator();
   const gain = metronomeCtx.createGain();
+  const now = metronomeCtx.currentTime;
   osc.frequency.value = metronomeBeat === 0 ? 1200 : 800;
-  gain.gain.setValueAtTime(0.3, metronomeCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, metronomeCtx.currentTime + 0.08);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
   osc.connect(gain).connect(metronomeCtx.destination);
-  osc.start();
-  osc.stop(metronomeCtx.currentTime + 0.1);
+  osc.start(now);
+  osc.stop(now + 0.1);
 }
 
 function startMetronome() {
@@ -755,7 +641,6 @@ function startMetronome() {
   metronomeCtx.resume();
 
   metronomeBeat = 0;
-  metronomeStatus.textContent = `Playing ${bpm} BPM`;
   metronomeToggle.textContent = "Stop";
 
   if (metronomeTimer) clearInterval(metronomeTimer);
@@ -770,7 +655,6 @@ function startMetronome() {
 function stopMetronome() {
   if (metronomeTimer) clearInterval(metronomeTimer);
   metronomeTimer = null;
-  metronomeStatus.textContent = "Stopped";
   metronomeToggle.textContent = "Start";
   metronomePulse.style.width = "0%";
 }
@@ -781,23 +665,22 @@ metronomeToggle.onclick = () => {
 };
 
 /* DRUM MACHINE */
-const drumStatus = document.getElementById("drumStatus");
-const drumToggle = document.getElementById("drumToggle");
 const drumBpmInput = document.getElementById("drumBpm");
 const swingInput = document.getElementById("swing");
 const patternLengthSelect = document.getElementById("patternLength");
 const stepGrid = document.getElementById("stepGrid");
-
+const drumToggle = document.getElementById("drumToggle");
 const pads = document.querySelectorAll(".pad");
+
 const drumCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const sounds = {
-  kick: { freq: 80, vol: document.getElementById("vol-kick") },
-  snare: { freq: 180, vol: document.getElementById("vol-snare") },
-  hihat: { freq: 6000, vol: document.getElementById("vol-hihat") },
-  tom: { freq: 140, vol: null },
-  ride: { freq: 900, vol: null },
-  rim: { freq: 400, vol: null }
+  kick: { freq: 80 },
+  snare: { freq: 180 },
+  hihat: { freq: 6000 },
+  tom: { freq: 140 },
+  ride: { freq: 900 },
+  rim: { freq: 400 }
 };
 
 function playSound(name) {
@@ -819,8 +702,7 @@ function playSound(name) {
     osc.frequency.setValueAtTime(cfg.freq, now);
   }
 
-  const baseVol = cfg.vol ? parseFloat(cfg.vol.value) : 0.7;
-  gain.gain.setValueAtTime(baseVol, now);
+  gain.gain.setValueAtTime(0.8, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
   osc.connect(gain).connect(drumCtx.destination);
@@ -838,15 +720,15 @@ pads.forEach(p => {
   p.addEventListener("mouseleave", () => p.classList.remove("active"));
 });
 
-/* Step sequencer grid: 6 sounds x N steps */
+/* Step sequencer grid: 6 sounds x 16 steps, default rock beat */
 const soundOrder = ["kick","snare","hihat","tom","ride","rim"];
-let patternLength = parseInt(patternLengthSelect.value, 10);
+let patternLength = 16;
 let steps = {};
 let drumTimer = null;
 let currentStep = 0;
 
 function buildGrid() {
-  patternLength = parseInt(patternLengthSelect.value, 10);
+  patternLength = 16;
   steps = {};
   const theadRow = stepGrid.querySelector("thead tr");
   theadRow.innerHTML = "<th>Sound</th>";
@@ -881,50 +763,70 @@ function buildGrid() {
     }
     tbody.appendChild(tr);
   });
+
+  preloadRockBeat();
+}
+
+function preloadRockBeat() {
+  // Kick on 1 and 3 (steps 0 and 8)
+  steps.kick[0] = true;
+  steps.kick[8] = true;
+  // Snare on 2 and 4 (steps 4 and 12)
+  steps.snare[4] = true;
+  steps.snare[12] = true;
+  // Hi-hat on 8ths: 0,2,4,6,8,10,12,14
+  [0,2,4,6,8,10,12,14].forEach(i => steps.hihat[i] = true);
+  // Ride on quarters: 0,4,8,12
+  [0,4,8,12].forEach(i => steps.ride[i] = true);
+
+  const tbody = stepGrid.querySelector("tbody");
+  soundOrder.forEach((sound, rowIndex) => {
+    const row = tbody.children[rowIndex];
+    for (let i = 0; i < patternLength; i++) {
+      const cell = row.children[i + 1];
+      const div = cell.querySelector(".step");
+      if (steps[sound][i]) div.classList.add("active");
+    }
+  });
 }
 
 buildGrid();
-patternLengthSelect.onchange = buildGrid;
 
 function startDrums() {
   const bpm = parseInt(drumBpmInput.value, 10) || 120;
   const swing = parseFloat(swingInput.value) || 0;
   const baseInterval = (60 / bpm) * 1000 / 4; // 16th notes
+
+  if (drumTimer) clearTimeout(drumTimer);
   currentStep = 0;
-  drumStatus.textContent = `Playing ${bpm} BPM`;
+  scheduleNextStep(baseInterval, swing);
   drumToggle.textContent = "Stop";
+}
 
-  if (drumTimer) clearInterval(drumTimer);
-  drumTimer = setInterval(() => {
-    const tbody = stepGrid.querySelector("tbody");
-    tbody.querySelectorAll(".step").forEach(el => el.classList.remove("current"));
+function scheduleNextStep(baseInterval, swing) {
+  const tbody = stepGrid.querySelector("tbody");
+  tbody.querySelectorAll(".step").forEach(el => el.classList.remove("current"));
 
-    soundOrder.forEach(sound => {
-      if (steps[sound][currentStep]) {
-        playSound(sound);
-        const rowIndex = soundOrder.indexOf(sound);
-        const row = tbody.children[rowIndex];
-        const cell = row.children[currentStep + 1];
-        const div = cell.querySelector(".step");
-        if (div) div.classList.add("current");
-      }
-    });
+  soundOrder.forEach((sound, rowIndex) => {
+    if (steps[sound][currentStep]) {
+      playSound(sound);
+      const row = tbody.children[rowIndex];
+      const cell = row.children[currentStep + 1];
+      const div = cell.querySelector(".step");
+      if (div) div.classList.add("current");
+    }
+  });
 
-    const isOffbeat = currentStep % 2 === 1;
-    const swingDelay = isOffbeat ? swing * baseInterval : 0;
+  const isOffbeat = currentStep % 2 === 1;
+  const swingDelay = isOffbeat ? swing * baseInterval : 0;
 
-    clearInterval(drumTimer);
-    drumTimer = setTimeout(() => {
-      currentStep = (currentStep + 1) % patternLength;
-      startDrums();
-    }, baseInterval + swingDelay);
-  }, baseInterval);
+  currentStep = (currentStep + 1) % patternLength;
+  drumTimer = setTimeout(() => scheduleNextStep(baseInterval, swing), baseInterval + swingDelay);
 }
 
 function stopDrums() {
   if (drumTimer) clearTimeout(drumTimer);
   drumTimer = null;
-  drumStatus.textContent = "Stopped";
   drumToggle.textContent = "Play";
   const tbody = stepGrid.querySelector("tbody");
   tbody.querySelectorAll(".step").forEach(el => el.classList.remove("current"));
@@ -935,7 +837,7 @@ drumToggle.onclick = () => {
   else startDrums();
 };
 
-/* keep metronome and drum BPM in sync if you want */
+/* Sync BPM between metronome and drums */
 drumBpmInput.addEventListener("input", () => {
   bpmInput.value = drumBpmInput.value;
 });
