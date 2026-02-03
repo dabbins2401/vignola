@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>THE PLEASE USE ME VIGNOLA TUNER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+:root {
+  --bg: #0a1a33;
+  --bg2: #11284d;
+  --text: #ffffff;
+  --subtle: #c7cdd8;
+  --accent: #8fb3ff;
+  --success: #4ade80;
+  --danger: #ff6b6b;
+  --radius: 20px;
+  --shadow: 0 14px 40px rgba(0,0,0,0.4);
+}
+
+.light {
+  --bg: #ffffff;
+  --bg2: #f2f4f8;
+  --text: #0a1a33;
+  --subtle: #4a5568;
+  --accent: #2b6cb0;
+  --success: #2f855a;
+  --danger: #c53030;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.app {
+  width: 100%;
+  max-width: 960px;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.3s;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand img {
+  height: 48px;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--subtle);
+}
+
+/* BUTTONS */
+.mic-btn, .mode-btn {
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.mic-btn:hover, .mode-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* CONTROL BAR (tuning) */
+.control-bar {
+  margin-top: 18px;
+  background: var(--bg);
+  padding: 14px 18px;
+  border-radius: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.control-bar select,
+.control-bar input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--subtle);
+  background: var(--bg2);
+  color: var(--text);
+  min-width: 180px;
+}
+
+.control-bar button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* STATUS */
+.status {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--subtle);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.status-dot.live {
+  background: var(--success);
+}
+
+/* CARD BASE */
+.card {
+  margin-top: 20px;
+  background: var(--bg);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+
+/* TUNER GAUGE */
+.gauge {
+  position: relative;
+  width: 300px;
+  height: 160px;
+  margin: 0 auto;
+}
+
+.gauge-arc {
+  width: 100%;
+  height: 100%;
+  border-radius: 300px 300px 0 0;
+  border: 6px solid var(--subtle);
+  border-bottom: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.tick {
+  position: absolute;
+  width: 2px;
+  height: 14px;
+  background: var(--subtle);
+  left: 50%;
+  transform-origin: bottom center;
+}
+
+.tick-label {
+  position: absolute;
+  font-size: 0.75rem;
+  color: var(--subtle);
+  transform: translateX(-50%);
+}
+
+.needle {
+  position: absolute;
+  width: 3px;
+  height: 120px;
+  background: var(--accent);
+  left: 50%;
+  bottom: 0;
+  transform-origin: bottom center;
+  transform: rotate(0deg);
+  transition: transform 0.08s ease-out;
+}
+
+.readout {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.note-display {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.freq-display {
+  font-size: 0.9rem;
+  color: var(--subtle);
+}
+
+.cents-pill {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--subtle);
+}
+
+.cents-pill.in-tune { border-color: var(--success); color: var(--success); }
+.cents-pill.sharp { border-color: var(--danger); color: var(--danger); }
+.cents-pill.flat { border-color: var(--accent); color: var(--accent); }
+
+/* METRONOME */
+.metronome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.metronome-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.metronome-controls input[type="number"],
+.metronome-controls select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--subtle);
+  background: var(--bg2);
+  color: var(--text);
+  width: 80px;
+}
+
+.metronome-btn {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.metronome-visual {
+  margin-top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.metronome-pulse {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.05s ease-out;
+}
+
+/* DRUM MACHINE */
+.drum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.drum-main {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 16px;
+}
+
+@media (max-width: 800px) {
+  .drum-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.drum-pads {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.pad {
+  padding: 14px 10px;
+  border-radius: 10px;
+  background: #1b2438;
+  border: 1px solid rgba(255,255,255,0.15);
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.1s ease;
+}
+
+.pad.active {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translateY(1px);
+}
+
+.drum-controls {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.drum-controls label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.drum-controls input[type="range"] {
+  width: 100px;
+}
+
+.drum-grid {
+  overflow-x: auto;
+}
+
+.step-grid {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
+.step-grid th,
+.step-grid td {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px;
+  text-align: center;
+}
+
+.step {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #1b2438;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.step.active {
+  background: var(--accent);
+}
+
+.step.current {
+  box-shadow: 0 0 0 2px var(--success);
+}
+</style>
+</head>
+
+<body class="dark">
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <img src="/shark.png" alt="Shark Logo">
+      <div>
+        <div class="title">THE PLEASE USE ME VIGNOLA TUNER</div>
+        <div class="subtitle">Tuner, metronome, and drum machine in one chic navy rig.</div>
+      </div>
+    </div>
+    <button class="mode-btn" id="modeBtn">Light Mode</button>
+  </div>
+
+  <!-- TUNING CONTROL BAR -->
+  <div class="control-bar">
+    <select id="tuningSelect">
+      <option value="auto">Auto (Closest Note)</option>
+      <option value="standard">Guitar — Standard (EADGBE)</option>
+      <option value="dropd">Guitar — Drop D</option>
+      <option value="openg">Guitar — Open G</option>
+      <option value="ukulele">Ukulele (GCEA)</option>
+      <option value="bass">Bass (EADG)</option>
+      <option value="custom">Custom Tuning</option>
+    </select>
+    <input id="customInput" placeholder="Enter notes (e.g. D2 A2 D3 G3)" style="display:none;">
+    <button id="applyCustom" style="display:none;">Apply</button>
+    <button id="micButton" class="mic-btn">Enable Mic</button>
+  </div>
+
+  <!-- STATUS -->
+  <div class="status">
+    <div id="statusDot" class="status-dot"></div>
+    <span id="statusText">Microphone is off.</span>
+  </div>
+
+  <!-- TUNER CARD -->
+  <div class="card">
+    <div class="gauge">
+      <div class="gauge-arc"></div>
+
+      <div class="tick" style="transform: translateX(-50%) rotate(-40deg); top: 10px;"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(-20deg); top: 10px;"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(0deg); top: 10px;"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(20deg); top: 10px;"></div>
+      <div class="tick" style="transform: translateX(-50%) rotate(40deg); top: 10px;"></div>
+
+      <div class="tick-label" style="left: 20%; top: 120px;">-50</div>
+      <div class="tick-label" style="left: 35%; top: 90px;">-25</div>
+      <div class="tick-label" style="left: 50%; top: 70px;">0</div>
+      <div class="tick-label" style="left: 65%; top: 90px;">+25</div>
+      <div class="tick-label" style="left: 80%; top: 120px;">+50</div>
+
+      <div id="needle" class="needle"></div>
+    </div>
+
+    <div class="readout">
+      <div id="noteDisplay" class="note-display">--</div>
+      <div id="freqDisplay" class="freq-display">-- Hz</div>
+      <div id="centsDisplay" class="cents-pill">Waiting…</div>
+    </div>
+  </div>
+
+  <!-- METRONOME CARD -->
+  <div class="card">
+    <div class="metronome-header">
+      <div><strong>Metronome</strong></div>
+      <div id="metronomeStatus" style="color:var(--subtle);">Stopped</div>
+    </div>
+    <div class="metronome-controls">
+      <label>BPM
+        <input type="number" id="bpmInput" min="30" max="260" value="120">
+      </label>
+      <label>Time
+        <select id="timeSigSelect">
+          <option value="4">4/4</option>
+          <option value="3">3/4</option>
+          <option value="6">6/8</option>
+        </select>
+      </label>
+      <button class="metronome-btn" id="metronomeToggle">Start</button>
+    </div>
+    <div class="metronome-visual">
+      <div class="metronome-pulse" id="metronomePulse"></div>
+    </div>
+  </div>
+
+  <!-- DRUM MACHINE CARD -->
+  <div class="card">
+    <div class="drum-header">
+      <div><strong>Drum Machine</strong> — Acoustic hybrid</div>
+      <div id="drumStatus" style="color:var(--subtle);">Stopped</div>
+    </div>
+
+    <div class="drum-main">
+      <!-- Pads + controls -->
+      <div>
+        <div class="drum-pads">
+          <div class="pad" data-sound="kick">Kick</div>
+          <div class="pad" data-sound="snare">Snare</div>
+          <div class="pad" data-sound="hihat">Hi‑Hat</div>
+          <div class="pad" data-sound="tom">Tom</div>
+          <div class="pad" data-sound="ride">Ride</div>
+          <div class="pad" data-sound="rim">Rim</div>
+        </div>
+
+        <div class="drum-controls">
+          <label>Tempo (shared)
+            <input type="number" id="drumBpm" min="30" max="260" value="120">
+          </label>
+          <label>Swing
+            <input type="range" id="swing" min="0" max="0.5" step="0.05" value="0">
+          </label>
+          <label>Length
+            <select id="patternLength">
+              <option value="8">8</option>
+              <option value="16" selected>16</option>
+              <option value="32">32</option>
+            </select>
+          </label>
+          <button class="metronome-btn" id="drumToggle">Play</button>
+        </div>
+
+        <div class="drum-controls">
+          <label>Kick Vol
+            <input type="range" id="vol-kick" min="0" max="1" step="0.05" value="0.9">
+          </label>
+          <label>Snare Vol
+            <input type="range" id="vol-snare" min="0" max="1" step="0.05" value="0.8">
+          </label>
+          <label>Hat Vol
+            <input type="range" id="vol-hihat" min="0" max="1" step="0.05" value="0.6">
+          </label>
+        </div>
+      </div>
+
+      <!-- Step grid -->
+      <div class="drum-grid">
+        <table class="step-grid" id="stepGrid">
+          <thead>
+            <tr>
+              <th>Sound</th>
+              <!-- steps injected by JS -->
+            </tr>
+          </thead>
+          <tbody>
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* DARK/LIGHT MODE */
+const modeBtn = document.getElementById("modeBtn");
+modeBtn.onclick = () => {
+  document.body.classList.toggle("light");
+  modeBtn.textContent = document.body.classList.contains("light")
+    ? "Dark Mode"
+    : "Light Mode";
+};
+
+/* TUNING PRESETS */
+const PRESETS = {
+  auto: [],
+  standard: ["E2","A2","D3","G3","B3","E4"],
+  dropd: ["D2","A2","D3","G3","B3","E4"],
+  openg: ["D2","G2","D3","G3","B3","D4"],
+  ukulele: ["G4","C4","E4","A4"],
+  bass: ["E1","A1","D2","G2"]
+};
+
+let activeTuning = [];
+
+const tuningSelect = document.getElementById("tuningSelect");
+const customInput = document.getElementById("customInput");
+const applyCustom = document.getElementById("applyCustom");
+
+tuningSelect.onchange = () => {
+  const val = tuningSelect.value;
+  if (val === "custom") {
+    customInput.style.display = "block";
+    applyCustom.style.display = "block";
+    activeTuning = [];
+  } else {
+    customInput.style.display = "none";
+    applyCustom.style.display = "none";
+    activeTuning = PRESETS[val].map(n => noteToFreq(n)).filter(Boolean);
+  }
+};
+
+applyCustom.onclick = () => {
+  const notes = customInput.value.trim().split(/\s+/);
+  activeTuning = notes.map(n => noteToFreq(n)).filter(Boolean);
+};
+
+function noteToFreq(note) {
+  const match = note.match(/^([A-G]#?)(\d)$/i);
+  if (!match) return null;
+  const name = match[1].toUpperCase();
+  const octave = parseInt(match[2], 10);
+  const SEMITONES = {
+    C:0, "C#":1, D:2, "D#":3, E:4,
+    F:5, "F#":6, G:7, "G#":8,
+    A:9, "A#":10, B:11
+  };
+  const n = SEMITONES[name] + (octave + 1) * 12;
+  return 440 * Math.pow(2, (n - 69) / 12);
+}
+
+/* TUNER AUDIO */
+const micButton = document.getElementById("micButton");
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+const needle = document.getElementById("needle");
+const noteDisplay = document.getElementById("noteDisplay");
+const freqDisplay = document.getElementById("freqDisplay");
+const centsDisplay = document.getElementById("centsDisplay");
+
+let audioContext = null;
+let analyser = null;
+let micStream = null;
+let dataBuffer = null;
+let rafId = null;
+
+micButton.onclick = async () => {
+  if (!audioContext || audioContext.state === "closed") {
+    await startTuner();
+  } else {
+    stopTuner();
+  }
+};
+
+async function startTuner() {
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    await audioContext.resume();
+    micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const source = audioContext.createMediaStreamSource(micStream);
+
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    dataBuffer = new Float32Array(analyser.fftSize);
+    source.connect(analyser);
+
+    statusDot.classList.add("live");
+    statusText.textContent = "Listening…";
+    micButton.textContent = "Disable Mic";
+
+    loopTuner();
+  } catch (e) {
+    console.error(e);
+    statusText.textContent = "Mic access failed. Check permissions.";
+    micButton.textContent = "Enable Mic";
+    audioContext = null;
+  }
+}
+
+function stopTuner() {
+  if (rafId) cancelAnimationFrame(rafId);
+  if (micStream) micStream.getTracks().forEach(t => t.stop());
+  if (audioContext) audioContext.close();
+  audioContext = null;
+  analyser = null;
+  micStream = null;
+  dataBuffer = null;
+
+  statusDot.classList.remove("live");
+  statusText.textContent = "Microphone is off.";
+  micButton.textContent = "Enable Mic";
+  needle.style.transform = "rotate(0deg)";
+  noteDisplay.textContent = "--";
+  freqDisplay.textContent = "-- Hz";
+  centsDisplay.textContent = "Waiting…";
+  centsDisplay.className = "cents-pill";
+}
+
+function loopTuner() {
+  if (!analyser || !dataBuffer) return;
+  analyser.getFloatTimeDomainData(dataBuffer);
+  const freq = detectPitch(dataBuffer, audioContext.sampleRate);
+  if (freq !== -1) updateTunerUI(freq);
+  rafId = requestAnimationFrame(loopTuner);
+}
+
+function detectPitch(buf, sampleRate) {
+  const SIZE = buf.length;
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.008) return -1;
+
+  let bestOffset = -1, bestCorr = 0;
+  for (let offset = 40; offset < 1000; offset++) {
+    let corr = 0;
+    for (let i = 0; i < SIZE - offset; i++) corr += buf[i] * buf[i + offset];
+    if (corr > bestCorr) {
+      bestCorr = corr;
+      bestOffset = offset;
+    }
+  }
+  return bestOffset > 0 ? sampleRate / bestOffset : -1;
+}
+
+function updateTunerUI(freq) {
+  freqDisplay.textContent = freq.toFixed(2) + " Hz";
+
+  const noteNum = Math.round(12 * (Math.log(freq / 440) / Math.log(2)) + 69);
+  const names = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+  const name = names[noteNum % 12];
+  const octave = Math.floor(noteNum / 12) - 1;
+  noteDisplay.textContent = name + octave;
+
+  const refFreq = 440 * Math.pow(2, (noteNum - 69) / 12);
+  const cents = 1200 * Math.log(freq / refFreq) / Math.log(2);
+  const c = Math.round(cents);
+
+  let angle = (c / 50) * 40;
+  angle = Math.max(-40, Math.min(40, angle));
+  needle.style.transform = `rotate(${angle}deg)`;
+
+  centsDisplay.className = "cents-pill";
+  if (Math.abs(c) <= 3) {
+    centsDisplay.textContent = "In tune";
+    centsDisplay.classList.add("in-tune");
+  } else if (c > 3) {
+    centsDisplay.textContent = `${c} sharp`;
+    centsDisplay.classList.add("sharp");
+  } else {
+    centsDisplay.textContent = `${c} flat`;
+    centsDisplay.classList.add("flat");
+  }
+}
+
+/* METRONOME */
+const bpmInput = document.getElementById("bpmInput");
+const timeSigSelect = document.getElementById("timeSigSelect");
+const metronomeToggle = document.getElementById("metronomeToggle");
+const metronomePulse = document.getElementById("metronomePulse");
+const metronomeStatus = document.getElementById("metronomeStatus");
+
+let metronomeCtx = null;
+let metronomeTimer = null;
+let metronomeBeat = 0;
+
+function metronomeClick() {
+  if (!metronomeCtx) metronomeCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = metronomeCtx.createOscillator();
+  const gain = metronomeCtx.createGain();
+  osc.frequency.value = metronomeBeat === 0 ? 1200 : 800;
+  gain.gain.setValueAtTime(0.3, metronomeCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, metronomeCtx.currentTime + 0.08);
+  osc.connect(gain).connect(metronomeCtx.destination);
+  osc.start();
+  osc.stop(metronomeCtx.currentTime + 0.1);
+}
+
+function startMetronome() {
+  const bpm = parseInt(bpmInput.value, 10) || 120;
+  const beatsPerBar = parseInt(timeSigSelect.value, 10);
+  const interval = (60 / bpm) * 1000;
+
+  if (!metronomeCtx) metronomeCtx = new (window.AudioContext || window.webkitAudioContext)();
+  metronomeCtx.resume();
+
+  metronomeBeat = 0;
+  metronomeStatus.textContent = `Playing ${bpm} BPM`;
+  metronomeToggle.textContent = "Stop";
+
+  if (metronomeTimer) clearInterval(metronomeTimer);
+  metronomeTimer = setInterval(() => {
+    metronomeClick();
+    metronomePulse.style.width = "100%";
+    setTimeout(() => metronomePulse.style.width = "0%", 80);
+    metronomeBeat = (metronomeBeat + 1) % beatsPerBar;
+  }, interval);
+}
+
+function stopMetronome() {
+  if (metronomeTimer) clearInterval(metronomeTimer);
+  metronomeTimer = null;
+  metronomeStatus.textContent = "Stopped";
+  metronomeToggle.textContent = "Start";
+  metronomePulse.style.width = "0%";
+}
+
+metronomeToggle.onclick = () => {
+  if (metronomeTimer) stopMetronome();
+  else startMetronome();
+};
+
+/* DRUM MACHINE */
+const drumStatus = document.getElementById("drumStatus");
+const drumToggle = document.getElementById("drumToggle");
+const drumBpmInput = document.getElementById("drumBpm");
+const swingInput = document.getElementById("swing");
+const patternLengthSelect = document.getElementById("patternLength");
+const stepGrid = document.getElementById("stepGrid");
+
+const pads = document.querySelectorAll(".pad");
+const drumCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+const sounds = {
+  kick: { freq: 80, vol: document.getElementById("vol-kick") },
+  snare: { freq: 180, vol: document.getElementById("vol-snare") },
+  hihat: { freq: 6000, vol: document.getElementById("vol-hihat") },
+  tom: { freq: 140, vol: null },
+  ride: { freq: 900, vol: null },
+  rim: { freq: 400, vol: null }
+};
+
+function playSound(name) {
+  const cfg = sounds[name];
+  if (!cfg) return;
+  const osc = drumCtx.createOscillator();
+  const gain = drumCtx.createGain();
+  const now = drumCtx.currentTime;
+
+  if (name === "kick") {
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(50, now + 0.15);
+  } else if (name === "snare") {
+    osc.frequency.setValueAtTime(200, now);
+  } else if (name === "hihat") {
+    osc.type = "square";
+    osc.frequency.setValueAtTime(cfg.freq, now);
+  } else {
+    osc.frequency.setValueAtTime(cfg.freq, now);
+  }
+
+  const baseVol = cfg.vol ? parseFloat(cfg.vol.value) : 0.7;
+  gain.gain.setValueAtTime(baseVol, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+  osc.connect(gain).connect(drumCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.2);
+}
+
+pads.forEach(p => {
+  p.addEventListener("mousedown", () => {
+    const s = p.dataset.sound;
+    p.classList.add("active");
+    playSound(s);
+  });
+  p.addEventListener("mouseup", () => p.classList.remove("active"));
+  p.addEventListener("mouseleave", () => p.classList.remove("active"));
+});
+
+/* Step sequencer grid: 6 sounds x N steps */
+const soundOrder = ["kick","snare","hihat","tom","ride","rim"];
+let patternLength = parseInt(patternLengthSelect.value, 10);
+let steps = {};
+let drumTimer = null;
+let currentStep = 0;
+
+function buildGrid() {
+  patternLength = parseInt(patternLengthSelect.value, 10);
+  steps = {};
+  const theadRow = stepGrid.querySelector("thead tr");
+  theadRow.innerHTML = "<th>Sound</th>";
+  for (let i = 0; i < patternLength; i++) {
+    const th = document.createElement("th");
+    th.textContent = i + 1;
+    theadRow.appendChild(th);
+  }
+
+  const tbody = stepGrid.querySelector("tbody");
+  tbody.innerHTML = "";
+  soundOrder.forEach(sound => {
+    steps[sound] = new Array(patternLength).fill(false);
+    const tr = document.createElement("tr");
+    const label = document.createElement("td");
+    label.textContent = sound;
+    tr.appendChild(label);
+    for (let i = 0; i < patternLength; i++) {
+      const td = document.createElement("td");
+      const div = document.createElement("div");
+      div.className = "step";
+      div.dataset.sound = sound;
+      div.dataset.index = i;
+      div.onclick = () => {
+        const idx = parseInt(div.dataset.index, 10);
+        const s = div.dataset.sound;
+        steps[s][idx] = !steps[s][idx];
+        div.classList.toggle("active", steps[s][idx]);
+      };
+      td.appendChild(div);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  });
+}
+
+buildGrid();
+patternLengthSelect.onchange = buildGrid;
+
+function startDrums() {
+  const bpm = parseInt(drumBpmInput.value, 10) || 120;
+  const swing = parseFloat(swingInput.value) || 0;
+  const baseInterval = (60 / bpm) * 1000 / 4; // 16th notes
+  currentStep = 0;
+  drumStatus.textContent = `Playing ${bpm} BPM`;
+  drumToggle.textContent = "Stop";
+
+  if (drumTimer) clearInterval(drumTimer);
+  drumTimer = setInterval(() => {
+    const tbody = stepGrid.querySelector("tbody");
+    tbody.querySelectorAll(".step").forEach(el => el.classList.remove("current"));
+
+    soundOrder.forEach(sound => {
+      if (steps[sound][currentStep]) {
+        playSound(sound);
+        const rowIndex = soundOrder.indexOf(sound);
+        const row = tbody.children[rowIndex];
+        const cell = row.children[currentStep + 1];
+        const div = cell.querySelector(".step");
+        if (div) div.classList.add("current");
+      }
+    });
+
+    const isOffbeat = currentStep % 2 === 1;
+    const swingDelay = isOffbeat ? swing * baseInterval : 0;
+
+    clearInterval(drumTimer);
+    drumTimer = setTimeout(() => {
+      currentStep = (currentStep + 1) % patternLength;
+      startDrums();
+    }, baseInterval + swingDelay);
+  }, baseInterval);
+}
+
+function stopDrums() {
+  if (drumTimer) clearTimeout(drumTimer);
+  drumTimer = null;
+  drumStatus.textContent = "Stopped";
+  drumToggle.textContent = "Play";
+  const tbody = stepGrid.querySelector("tbody");
+  tbody.querySelectorAll(".step").forEach(el => el.classList.remove("current"));
+}
+
+drumToggle.onclick = () => {
+  if (drumTimer) stopDrums();
+  else startDrums();
+};
+
+/* keep metronome and drum BPM in sync if you want */
+drumBpmInput.addEventListener("input", () => {
+  bpmInput.value = drumBpmInput.value;
+});
+bpmInput.addEventListener("input", () => {
+  drumBpmInput.value = bpmInput.value;
+});
+</script>
+
+</body>
+</html>
